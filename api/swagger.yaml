@@ -125,7 +125,7 @@ definitions:
         - "USD"
         description: "list of allowed currencies"
         items:
-          $ref: "#/components/schemas/currency"
+          $ref: "#/definitions/currency"
       walletaddress:
         type: "string"
         example: "E"
