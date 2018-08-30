@@ -184,3 +184,10 @@ definitions:
       defaultvat: "+44 333 333 333"
       email: "support@electrabay.com"
       status: "+44 333 333 333"
+  currency:
+    type: "object"
+    description: "Currency list"
+    example: "USD"
+    enum:
+    - "USD"
+    - "EURO"
