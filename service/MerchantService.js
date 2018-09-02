@@ -2,12 +2,12 @@
 
 
 /**
- * Fetch account details
+ * Create a new account
  * No parameters
  *
  * returns Account
  **/
-exports.getAccount = function() {
+exports.newAccount = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

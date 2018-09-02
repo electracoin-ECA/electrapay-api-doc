@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Merchant = require('../service/MerchantService');
 
-module.exports.getAccount = function getAccount (req, res, next) {
-  Merchant.getAccount()
+module.exports.newAccount = function newAccount (req, res, next) {
+  Merchant.newAccount()
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -20,12 +20,12 @@ schemes:
 - "https"
 paths:
   /account:
-    get:
+    put:
       tags:
       - "merchant"
-      summary: "Fetch account details"
+      summary: "Create a new account"
       description: "No parameters"
-      operationId: "getAccount"
+      operationId: "newAccount"
       produces:
       - "application/json"
       parameters: []
