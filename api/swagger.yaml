@@ -20,6 +20,29 @@ schemes:
 - "https"
 paths:
   /account:
+    get:
+      tags:
+      - "merchant"
+      summary: "Fetch account details"
+      description: "No parameters"
+      operationId: "getAccount"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/Account"
+        400:
+          description: "Invalid request"
+        401:
+          description: "Authorization information is missing or invalid."
+        404:
+          description: "Account information not found."
+        500:
+          description: "Internal service error"
+      x-swagger-router-controller: "Merchant"
     put:
       tags:
       - "merchant"
