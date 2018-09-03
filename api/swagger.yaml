@@ -64,6 +64,9 @@ paths:
         500:
           description: "Internal service error"
       x-swagger-router-controller: "Account"
+securityDefinitions:
+  basicAuth:
+    type: "basic"
 definitions:
   account:
     type: "object"
