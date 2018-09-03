@@ -1,7 +1,7 @@
 {
-  "name": "electrapay",
+  "name": "electrapay-api",
   "version": "1.0.0",
-  "description": "This is ElectraPay API",
+  "description": "REST API for ElectraPay",
   "main": "index.js",
   "scripts": {
 	"prestart": "npm install",

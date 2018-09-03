@@ -1,14 +1,11 @@
 ---
 swagger: "2.0"
 info:
-  description: "This is ElectraPay API"
+  description: "REST API for ElectraPay"
   version: "1.0.0"
-  title: "ElectraPay"
+  title: "ElectraPay API"
   contact:
-    email: "dev@electraproject.org"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    email: "develop@electraproject.org"
 host: "virtserver.swaggerhub.com"
 basePath: "/electraproject/ElectraPay/1.0.0"
 tags:
@@ -17,7 +14,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /account:
+  /v1/account:
     get:
       tags:
       - "account"
@@ -40,6 +37,8 @@ paths:
           description: "Account information not found."
         500:
           description: "Internal service error"
+      security:
+      - basicAuth: []
       x-swagger-router-controller: "Account"
     put:
       tags:
@@ -47,6 +46,8 @@ paths:
       summary: "Add a new account"
       description: "Add a new account."
       operationId: "add"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
       parameters: []
