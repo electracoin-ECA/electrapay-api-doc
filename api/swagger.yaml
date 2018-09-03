@@ -208,6 +208,28 @@ definitions:
       defaultvat: "25"
       email: "support@electrabay.com"
       status: "ACTIVE"
+  paymentmethod:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      paymentmethodtype:
+        type: "object"
+        properties: {}
+      walletaddress:
+        type: "string"
+      exchangerate:
+        type: "number"
+        format: "float"
+      amount:
+        type: "number"
+        format: "float"
+      fee:
+        type: "array"
+        items:
+          type: "string"
+    description: "Payment method object"
+    example: "ee"
   currency:
     type: "object"
     description: "Currency list"
