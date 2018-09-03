@@ -12,17 +12,15 @@ info:
 host: "virtserver.swaggerhub.com"
 basePath: "/electraproject/ElectraPay/1.0.0"
 tags:
-- name: "merchant"
-  description: "Secured Merchant-only calls"
-- name: "client"
-  description: "Customer only calls"
+- name: "account"
+  description: "Secured Merchant account only calls"
 schemes:
 - "https"
 paths:
   /account:
     get:
       tags:
-      - "merchant"
+      - "account"
       summary: "Fetch account details"
       description: "No parameters"
       operationId: "getAccount"
@@ -33,7 +31,7 @@ paths:
         200:
           description: "Successful"
           schema:
-            $ref: "#/definitions/Account"
+            $ref: "#/definitions/account"
         400:
           description: "Invalid request"
         401:
@@ -42,13 +40,13 @@ paths:
           description: "Account information not found."
         500:
           description: "Internal service error"
-      x-swagger-router-controller: "Merchant"
+      x-swagger-router-controller: "Account"
     put:
       tags:
-      - "merchant"
-      summary: "Create a new account"
-      description: "No parameters"
-      operationId: "newAccount"
+      - "account"
+      summary: "Add a new account"
+      description: "Add a new account."
+      operationId: "add"
       produces:
       - "application/json"
       parameters: []
@@ -56,7 +54,7 @@ paths:
         200:
           description: "Successful"
           schema:
-            $ref: "#/definitions/Account"
+            $ref: "#/definitions/account"
         400:
           description: "Invalid request"
         401:
@@ -65,9 +63,9 @@ paths:
           description: "Account information not found."
         500:
           description: "Internal service error"
-      x-swagger-router-controller: "Merchant"
+      x-swagger-router-controller: "Account"
 definitions:
-  Account:
+  account:
     type: "object"
     required:
     - "callbackuri"
@@ -168,19 +166,19 @@ definitions:
         description: "phone number"
       vatno:
         type: "string"
-        example: "+44 333 333 333"
-        description: "phone number"
+        example: "140976"
+        description: "VAT number"
       defaultvat:
         type: "string"
-        example: "+44 333 333 333"
-        description: "phone number"
+        example: "25"
+        description: "VAT percentage"
       organisation:
         type: "string"
-        example: "+44 333 333 333"
-        description: "phone number"
+        example: "ElectraProject"
+        description: "Name from Organisation Model"
       status:
         type: "string"
-        example: "+44 333 333 333"
+        example: "ACTIVE"
         description: "phone number"
     example:
       country: "NL"
@@ -189,9 +187,9 @@ definitions:
       city: "Amsterdam"
       address1: "address1"
       timezone: "Europe/Amsterdam"
-      vatno: "+44 333 333 333"
+      vatno: "140976"
       description: "Electra Donation Wallet"
-      organisation: "+44 333 333 333"
+      organisation: "ElectraProject"
       language: "nl"
       type: "nonprofit"
       contactname: "Mr E Peterson"
@@ -204,9 +202,9 @@ definitions:
       currency:
       - "USD"
       id: "d290f1ee-6c54-4b01-90e6-d701748f0851"
-      defaultvat: "+44 333 333 333"
+      defaultvat: "25"
       email: "support@electrabay.com"
-      status: "+44 333 333 333"
+      status: "ACTIVE"
   currency:
     type: "object"
     description: "Currency list"
