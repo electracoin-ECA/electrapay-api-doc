@@ -23,7 +23,8 @@ exports.add = function() {
   "language" : "nl",
   "type" : "nonprofit",
   "contactname" : "Mr E Peterson",
-  "walletaddress" : "E",
+  "plugintype" : "MAGENTO2",
+  "walletaddress" : "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ",
   "phone" : "+44 333 333 333",
   "postalcode" : "2390",
   "callbackuri" : "https://www.electrabay/api",
@@ -31,7 +32,7 @@ exports.add = function() {
   "logo" : "http://electraproject.org/images/logo.svg",
   "currency" : [ "USD" ],
   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "defaultvat" : "25",
+  "defaultvat" : 25.0,
   "email" : "support@electrabay.com",
   "status" : "ACTIVE"
 };
@@ -66,7 +67,8 @@ exports.getAccount = function() {
   "language" : "nl",
   "type" : "nonprofit",
   "contactname" : "Mr E Peterson",
-  "walletaddress" : "E",
+  "plugintype" : "MAGENTO2",
+  "walletaddress" : "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ",
   "phone" : "+44 333 333 333",
   "postalcode" : "2390",
   "callbackuri" : "https://www.electrabay/api",
@@ -74,7 +76,7 @@ exports.getAccount = function() {
   "logo" : "http://electraproject.org/images/logo.svg",
   "currency" : [ "USD" ],
   "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
-  "defaultvat" : "25",
+  "defaultvat" : 25.0,
   "email" : "support@electrabay.com",
   "status" : "ACTIVE"
 };

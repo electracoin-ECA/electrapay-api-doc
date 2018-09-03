@@ -67,11 +67,14 @@ paths:
 securityDefinitions:
   basicAuth:
     type: "basic"
+  apiKey:
+    type: "apiKey"
+    name: "X-Auth-Token"
+    in: "header"
 definitions:
   account:
     type: "object"
     required:
-    - "callbackuri"
     - "currency"
     - "defaultvat"
     - "description"
@@ -118,15 +121,15 @@ definitions:
       country:
         type: "string"
         example: "NL"
-        description: "Account country in [ISO 3166-1 alpha-2 $resource] (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)"
+        description: "Account country in [ISO 3166-1 alpha-2] (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)"
       language:
         type: "string"
         example: "nl"
-        description: "Account language ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
+        description: "Account language [ISO 639-1] (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
       timezone:
         type: "string"
         example: "Europe/Amsterdam"
-        description: "Timezone full description (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)"
+        description: "Timezone full description on [[Wikipedia] (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)"
       callbackuri:
         type: "string"
         example: "https://www.electrabay/api"
@@ -147,12 +150,12 @@ definitions:
         type: "array"
         example:
         - "USD"
-        description: "list of allowed currencies"
+        description: "List of allowed currencies"
         items:
           $ref: "#/definitions/currency"
       walletaddress:
         type: "string"
-        example: "E"
+        example: "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ"
         description: "ECA wallet address"
       contactname:
         type: "string"
@@ -172,17 +175,28 @@ definitions:
         example: "140976"
         description: "VAT number"
       defaultvat:
-        type: "string"
-        example: "25"
+        type: "number"
+        example: 25
         description: "VAT percentage"
+        minimum: 0
+        maximum: 100
       organisation:
         type: "string"
         example: "ElectraProject"
         description: "Name from Organisation Model"
+      plugintype:
+        type: "object"
+        example: "MAGENTO2"
+        description: "eCommerce Plugin list"
+        properties: {}
       status:
         type: "string"
         example: "ACTIVE"
-        description: "phone number"
+        description: "The account status"
+        enum:
+        - "ACTIVE"
+        - "SUSPENDED"
+        - "SUSPECT"
     example:
       country: "NL"
       website: "https://www.electrabay"
@@ -196,7 +210,8 @@ definitions:
       language: "nl"
       type: "nonprofit"
       contactname: "Mr E Peterson"
-      walletaddress: "E"
+      plugintype: "MAGENTO2"
+      walletaddress: "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ"
       phone: "+44 333 333 333"
       postalcode: "2390"
       callbackuri: "https://www.electrabay/api"
@@ -205,9 +220,77 @@ definitions:
       currency:
       - "USD"
       id: "d290f1ee-6c54-4b01-90e6-d701748f0851"
-      defaultvat: "25"
+      defaultvat: 25
       email: "support@electrabay.com"
       status: "ACTIVE"
+  key:
+    type: "object"
+    required:
+    - "created"
+    - "key"
+    properties:
+      key:
+        type: "string"
+        example: "priv_fcfac2016614418f969fa5697383e47c"
+        description: "Api key"
+      created:
+        type: "string"
+        format: "date-time"
+        example: "2018-04-04T12:40:56.656+00:00"
+        description: "Key creation date. In [ISO-8601](http://en.wikipedia.org/wiki/ISO_8601)\
+          \ extended offset date-time format."
+  transaction:
+    type: "object"
+    required:
+    - "accountid"
+    - "id"
+    - "longdescription"
+    - "shortdescription"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        example: "f341d1ac-5b05-9c21-98f2-a91578b1245"
+        description: "Unique id assigned by electraPay"
+      accountid:
+        type: "string"
+        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        description: "Account id assigned by ElectraPay"
+      shortdescription:
+        type: "string"
+        example: "Electra donation"
+        description: "A short description of what is being paid for."
+      longdescription:
+        type: "string"
+        example: "Electra donation to developers"
+        description: "A long description of what is being paid for."
+      amount:
+        type: "number"
+        format: "float"
+        example: 200.0
+        description: "The order amount (excluding fees)"
+      currency:
+        $ref: "#/definitions/currency"
+      fee:
+        type: "string"
+        example: "200.0"
+        description: "Fee structure"
+      paymentmethod:
+        $ref: "#/definitions/paymentmethod"
+      paymenttype:
+        type: "string"
+        example: "donation"
+        description: "The payment type"
+        enum:
+        - "goods"
+        - "services"
+        - "donation"
+        - "event"
+        - "personal"
+      expirytime:
+        type: "string"
+        example: "USD"
+        description: "The currency of the charged amount"
   paymentmethod:
     type: "object"
     properties:
@@ -229,7 +312,7 @@ definitions:
         items:
           type: "string"
     description: "Payment method object"
-    example: "ee"
+    example: "ee1"
   currency:
     type: "object"
     description: "Currency list"
