@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Account = require('../service/AccountService');
 
-module.exports.add = function add (req, res, next) {
-  Account.add()
+module.exports.accountNew = function accountNew (req, res, next) {
+  Account.accountNew()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -14,7 +14,8 @@ module.exports.add = function add (req, res, next) {
 };
 
 module.exports.getAccount = function getAccount (req, res, next) {
-  Account.getAccount()
+  var id = req.swagger.params['id'].value;
+  Account.getAccount(id)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -11,19 +11,27 @@ basePath: "/electraproject/ElectraPay/1.0.0"
 tags:
 - name: "account"
   description: "Secured Merchant account only calls"
+- name: "order"
+  description: "Secured Merchant order only calls"
 schemes:
 - "https"
 paths:
-  /v1/account:
+  /v1/account/{id}:
     get:
       tags:
       - "account"
       summary: "Fetch account details"
-      description: "No parameters"
+      description: "Retrieve the account details."
       operationId: "getAccount"
       produces:
       - "application/json"
-      parameters: []
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Enter the accountid to retrieve"
+        required: true
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "Successful"
@@ -40,12 +48,13 @@ paths:
       security:
       - basicAuth: []
       x-swagger-router-controller: "Account"
-    put:
+  /v1/account:
+    post:
       tags:
       - "account"
       summary: "Add a new account"
       description: "Add a new account."
-      operationId: "add"
+      operationId: "accountNew"
       consumes:
       - "application/json"
       produces:
@@ -65,6 +74,38 @@ paths:
         500:
           description: "Internal service error"
       x-swagger-router-controller: "Account"
+  /v1/order:
+    post:
+      tags:
+      - "order"
+      summary: "Add a new order request"
+      description: "Process a new order request"
+      operationId: "orderNew"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "order"
+        description: "New order details"
+        required: true
+        schema:
+          $ref: "#/definitions/ordernew"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/order"
+        400:
+          description: "Invalid request"
+        401:
+          description: "Authorization information is missing or invalid."
+        404:
+          description: "Account information not found."
+        500:
+          description: "Internal service error"
+      x-swagger-router-controller: "Order"
 securityDefinitions:
   basicAuth:
     type: "basic"
@@ -76,19 +117,26 @@ definitions:
   account:
     type: "object"
     required:
-    - "currency"
+    - "accounttype"
+    - "currencies"
     - "defaultvat"
     - "description"
     - "id"
     - "language"
     - "name"
     - "organisation"
+    - "plugintype"
     - "status"
     - "timezone"
-    - "type"
+    - "uuid"
     - "walletaddress"
+    - "walletcurrency"
     properties:
       id:
+        type: "number"
+        example: 1
+        description: "Internal id assigned by electraPay"
+      uuid:
         type: "string"
         format: "uuid"
         example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
@@ -101,7 +149,19 @@ definitions:
         type: "string"
         example: "Electra Donation Wallet"
         description: "Account description"
-      logo:
+      accounttype:
+        type: "string"
+        example: "nonprofit"
+        description: "Account type"
+        enum:
+        - "personal"
+        - "business"
+        - "nonprofit"
+      logourl:
+        type: "string"
+        example: "http://electraproject.org/images/logo.svg"
+        description: "Account logo URL"
+      logoimg:
         type: "string"
         example: "http://electraproject.org/images/logo.svg"
         description: "Account logo URL"
@@ -111,10 +171,17 @@ definitions:
       address2:
         type: "string"
         description: "Account address line 2"
-      postalcode:
+      address3:
         type: "string"
-        example: "2390"
+        description: "Account address line 3"
+      postalcode:
+        type: "number"
+        example: 2390
         description: "Account postal code"
+      suburb:
+        type: "string"
+        example: "Leidseplein"
+        description: "Account Suburb name"
       city:
         type: "string"
         example: "Amsterdam"
@@ -139,15 +206,7 @@ definitions:
         type: "string"
         example: "https://www.electrabay"
         description: "Website address"
-      type:
-        type: "string"
-        example: "nonprofit"
-        description: "Account type"
-        enum:
-        - "personal"
-        - "business"
-        - "nonprofit"
-      currency:
+      currencies:
         type: "array"
         example:
         - "USD"
@@ -157,23 +216,43 @@ definitions:
       walletaddress:
         type: "string"
         example: "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ"
-        description: "ECA wallet address"
-      contactname:
+        description: "Coin wallet address"
+      walletcurrency:
         type: "string"
-        example: "Mr E Peterson"
-        description: "Name of contact person"
-      email:
+        example: "ECA"
+        description: "Name of coin"
+      contacttitle:
+        type: "string"
+        example: "Mr"
+        description: "Title contact person"
+      contactfirstname:
+        type: "string"
+        example: "Edward"
+        description: "Firstname of contact person"
+      contactmiddlenames:
+        type: "string"
+        example: "Mark"
+        description: "Middlenames of contact person"
+      contactlastname:
+        type: "string"
+        example: "Peterson"
+        description: "Lastname of contact person"
+      contactemail:
         type: "string"
         format: "email"
-        example: "support@electrabay.com"
-        description: "email address"
-      phone:
+        example: "edwardp@electrabay.com"
+        description: "email address of contact person"
+      contactphone:
         type: "string"
         example: "+44 333 333 333"
-        description: "phone number"
+        description: "phone number of contact person"
+      contactmobile:
+        type: "string"
+        example: "+44 333 333 333"
+        description: "mobile number of contact person"
       vatno:
         type: "string"
-        example: "140976"
+        example: "V140976"
         description: "VAT number"
       defaultvat:
         type: "number"
@@ -186,10 +265,13 @@ definitions:
         example: "ElectraProject"
         description: "Name from Organisation Model"
       plugintype:
-        type: "object"
+        type: "string"
         example: "MAGENTO2"
         description: "eCommerce Plugin list"
-        properties: {}
+        enum:
+        - "MAGENTO2"
+        - "MAGENTO"
+        - "SHOPIFY"
       status:
         type: "string"
         example: "ACTIVE"
@@ -198,31 +280,42 @@ definitions:
         - "ACTIVE"
         - "SUSPENDED"
         - "SUSPECT"
+        - "PENDING"
+        - "DEACTIVATED"
     example:
+      contactemail: "edwardp@electrabay.com"
       country: "NL"
-      website: "https://www.electrabay"
-      address2: "address2"
       city: "Amsterdam"
-      address1: "address1"
       timezone: "Europe/Amsterdam"
-      vatno: "140976"
+      vatno: "V140976"
+      accounttype: "nonprofit"
       description: "Electra Donation Wallet"
       organisation: "ElectraProject"
       language: "nl"
-      type: "nonprofit"
-      contactname: "Mr E Peterson"
+      uuid: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      logourl: "http://electraproject.org/images/logo.svg"
       plugintype: "MAGENTO2"
+      logoimg: "http://electraproject.org/images/logo.svg"
       walletaddress: "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ"
-      phone: "+44 333 333 333"
-      postalcode: "2390"
+      postalcode: 2390
+      id: 1
+      contactphone: "+44 333 333 333"
+      contactmobile: "+44 333 333 333"
+      website: "https://www.electrabay"
+      contactfirstname: "Edward"
+      address3: "address3"
+      address2: "address2"
+      address1: "address1"
+      contactlastname: "Peterson"
       callbackuri: "https://www.electrabay/api"
+      contacttitle: "Mr"
+      contactmiddlenames: "Mark"
       name: "Electra Donation Wallet"
-      logo: "http://electraproject.org/images/logo.svg"
-      currency:
-      - "USD"
-      id: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+      suburb: "Leidseplein"
+      walletcurrency: "ECA"
       defaultvat: 25
-      email: "support@electrabay.com"
+      currencies:
+      - "USD"
       status: "ACTIVE"
   key:
     type: "object"
@@ -244,18 +337,27 @@ definitions:
     type: "object"
     required:
     - "accountid"
+    - "id"
     - "longdescription"
+    - "orderamount"
+    - "ordercurrency"
+    - "paymentcategory"
+    - "reference"
     - "shortdescription"
     - "uuid"
     properties:
+      id:
+        type: "number"
+        example: 1
+        description: "Unique id assigned by electraPay"
       uuid:
         type: "string"
         format: "uuid"
-        example: "f341d1ac-5b05-9c21-98f2-a91578b1245"
+        example: "f59f2257-3363-4f2f-a8a4-a288b7c0b7db"
         description: "Unique id assigned by electraPay"
       accountid:
-        type: "string"
-        example: "d290f1ee-6c54-4b01-90e6-d701748f0851"
+        type: "number"
+        example: 1
         description: "Account id assigned by ElectraPay"
       shortdescription:
         type: "string"
@@ -265,19 +367,10 @@ definitions:
         type: "string"
         example: "Electra donation to developers"
         description: "A long description of what is being paid for."
-      amount:
-        type: "number"
-        format: "float"
-        example: 200.0
-        description: "The order amount (excluding fees)"
-      currency:
-        $ref: "#/definitions/currency"
-      fee:
+      reference:
         type: "string"
-        example: "200.0"
-        description: "Fee structure"
-      paymentmethod:
-        $ref: "#/definitions/paymentmethod"
+        example: "ORD-11109"
+        description: "Unique reference to link to calling system."
       paymentcategory:
         type: "string"
         example: "donation"
@@ -288,36 +381,121 @@ definitions:
         - "donation"
         - "event"
         - "personal"
-      expirytime:
+      ordercurrency:
         type: "string"
         example: "USD"
-        description: "The currency of the charged amount"
-  paymentmethod:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      paymentmethodtype:
-        type: "object"
-        properties: {}
-      walletaddress:
+        description: "The currency of the order"
+        enum:
+        - "ECA"
+        - "BTC"
+        - "USD"
+      orderamount:
+        type: "number"
+        format: "float"
+        example: 12.0
+        description: "The order amount (excluding fees)"
+      quotecurrency:
         type: "string"
-      exchangerate:
+        example: "ECA"
+        description: "The currency of the quoted amount"
+        enum:
+        - "ECA"
+      quoteamount:
         type: "number"
         format: "float"
-      amount:
+        example: 20000.0
+        description: "The final quoted amount"
+      qrcode:
+        type: "string"
+        example: "null"
+        description: "Base64 image for the QR Code"
+      ordertoken:
         type: "number"
-        format: "float"
-      fee:
-        type: "array"
-        items:
-          type: "string"
-    description: "Payment method object"
-    example: "ee1"
-  currency:
+        example: 11654
+        description: "A random generated token number that can also be used for payment."
+      ordertransactionid:
+        type: "string"
+        example: "null"
+        description: "Blockchain transactionid for the final payment"
+      orderstatus:
+        type: "string"
+        enum:
+        - "PENDING"
+        - "AWAITING_PAYMENT"
+        - "FINAL_PAYMENT"
+        - "CLOSED"
+        - "CANCELLED"
+        - "REVERSED"
+    example:
+      shortdescription: "Electra donation"
+      paymentcategory: "donation"
+      orderstatus: "PENDING"
+      qrcode: "null"
+      ordertransactionid: "null"
+      uuid: "f59f2257-3363-4f2f-a8a4-a288b7c0b7db"
+      quotecurrency: "ECA"
+      reference: "ORD-11109"
+      ordertoken: 11654
+      accountid: 1
+      quoteamount: 20000.0
+      orderamount: 12.0
+      longdescription: "Electra donation to developers"
+      id: 1
+      ordercurrency: "USD"
+  ordernew:
     type: "object"
+    required:
+    - "accountid"
+    - "longdescription"
+    - "orderamount"
+    - "ordercurrency"
+    - "paymentcategory"
+    - "reference"
+    - "shortdescription"
+    properties:
+      accountid:
+        type: "number"
+        example: 1
+        description: "Account id assigned by ElectraPay"
+      shortdescription:
+        type: "string"
+        example: "Electra donation"
+        description: "A short description of what is being paid for"
+      longdescription:
+        type: "string"
+        example: "Electra donation to developers"
+        description: "A long description of what is being paid for"
+      reference:
+        type: "string"
+        example: "ORD-11109"
+        description: "Unique reference to link to calling system."
+      paymentcategory:
+        type: "string"
+        example: "donation"
+        description: "The payment type"
+        enum:
+        - "goods"
+        - "services"
+        - "donation"
+        - "event"
+        - "personal"
+      ordercurrency:
+        type: "string"
+        example: "USD"
+        description: "The currency of the order"
+        enum:
+        - "ECA"
+        - "BTC"
+        - "USD"
+      orderamount:
+        type: "number"
+        format: "float"
+        example: 12.0
+        description: "The order amount (excluding fees)"
+  currency:
+    type: "string"
     description: "Currency list"
     example: "USD"
     enum:
     - "USD"
-    - "EURO"
+    - "EUR"

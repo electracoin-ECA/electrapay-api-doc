@@ -7,33 +7,42 @@
  *
  * returns account
  **/
-exports.add = function() {
+exports.accountNew = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
+  "contactemail" : "edwardp@electrabay.com",
   "country" : "NL",
-  "website" : "https://www.electrabay",
-  "address2" : "address2",
   "city" : "Amsterdam",
-  "address1" : "address1",
   "timezone" : "Europe/Amsterdam",
-  "vatno" : "140976",
+  "vatno" : "V140976",
+  "accounttype" : "nonprofit",
   "description" : "Electra Donation Wallet",
   "organisation" : "ElectraProject",
   "language" : "nl",
-  "type" : "nonprofit",
-  "contactname" : "Mr E Peterson",
+  "uuid" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "logourl" : "http://electraproject.org/images/logo.svg",
   "plugintype" : "MAGENTO2",
+  "logoimg" : "http://electraproject.org/images/logo.svg",
   "walletaddress" : "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ",
-  "phone" : "+44 333 333 333",
-  "postalcode" : "2390",
+  "postalcode" : 2390.0,
+  "id" : 1.0,
+  "contactphone" : "+44 333 333 333",
+  "contactmobile" : "+44 333 333 333",
+  "website" : "https://www.electrabay",
+  "contactfirstname" : "Edward",
+  "address3" : "address3",
+  "address2" : "address2",
+  "address1" : "address1",
+  "contactlastname" : "Peterson",
   "callbackuri" : "https://www.electrabay/api",
+  "contacttitle" : "Mr",
+  "contactmiddlenames" : "Mark",
   "name" : "Electra Donation Wallet",
-  "logo" : "http://electraproject.org/images/logo.svg",
-  "currency" : [ "USD" ],
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "suburb" : "Leidseplein",
+  "walletcurrency" : "ECA",
   "defaultvat" : 25.0,
-  "email" : "support@electrabay.com",
+  "currencies" : [ "USD" ],
   "status" : "ACTIVE"
 };
     if (Object.keys(examples).length > 0) {
@@ -47,37 +56,47 @@ exports.add = function() {
 
 /**
  * Fetch account details
- * No parameters
+ * Retrieve the account details.
  *
+ * id Long Enter the accountid to retrieve
  * returns account
  **/
-exports.getAccount = function() {
+exports.getAccount = function(id) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
+  "contactemail" : "edwardp@electrabay.com",
   "country" : "NL",
-  "website" : "https://www.electrabay",
-  "address2" : "address2",
   "city" : "Amsterdam",
-  "address1" : "address1",
   "timezone" : "Europe/Amsterdam",
-  "vatno" : "140976",
+  "vatno" : "V140976",
+  "accounttype" : "nonprofit",
   "description" : "Electra Donation Wallet",
   "organisation" : "ElectraProject",
   "language" : "nl",
-  "type" : "nonprofit",
-  "contactname" : "Mr E Peterson",
+  "uuid" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "logourl" : "http://electraproject.org/images/logo.svg",
   "plugintype" : "MAGENTO2",
+  "logoimg" : "http://electraproject.org/images/logo.svg",
   "walletaddress" : "EVggmyfsA7krt7XsCYyh5DVe5JxDbVs5cZ",
-  "phone" : "+44 333 333 333",
-  "postalcode" : "2390",
+  "postalcode" : 2390.0,
+  "id" : 1.0,
+  "contactphone" : "+44 333 333 333",
+  "contactmobile" : "+44 333 333 333",
+  "website" : "https://www.electrabay",
+  "contactfirstname" : "Edward",
+  "address3" : "address3",
+  "address2" : "address2",
+  "address1" : "address1",
+  "contactlastname" : "Peterson",
   "callbackuri" : "https://www.electrabay/api",
+  "contacttitle" : "Mr",
+  "contactmiddlenames" : "Mark",
   "name" : "Electra Donation Wallet",
-  "logo" : "http://electraproject.org/images/logo.svg",
-  "currency" : [ "USD" ],
-  "id" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "suburb" : "Leidseplein",
+  "walletcurrency" : "ECA",
   "defaultvat" : 25.0,
-  "email" : "support@electrabay.com",
+  "currencies" : [ "USD" ],
   "status" : "ACTIVE"
 };
     if (Object.keys(examples).length > 0) {
