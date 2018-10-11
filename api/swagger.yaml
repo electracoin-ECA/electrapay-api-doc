@@ -240,15 +240,15 @@ definitions:
         example: "2018-04-04T12:40:56.656+00:00"
         description: "Key creation date. In [ISO-8601](http://en.wikipedia.org/wiki/ISO_8601)\
           \ extended offset date-time format."
-  transaction:
+  order:
     type: "object"
     required:
     - "accountid"
-    - "id"
     - "longdescription"
     - "shortdescription"
+    - "uuid"
     properties:
-      id:
+      uuid:
         type: "string"
         format: "uuid"
         example: "f341d1ac-5b05-9c21-98f2-a91578b1245"
@@ -278,7 +278,7 @@ definitions:
         description: "Fee structure"
       paymentmethod:
         $ref: "#/definitions/paymentmethod"
-      paymenttype:
+      paymentcategory:
         type: "string"
         example: "donation"
         description: "The payment type"
